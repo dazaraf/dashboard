@@ -6,10 +6,10 @@ var index = require('./routes/index');
 
 
 var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'dudu',
-  password : '12041992',
-  database: 'mayan'
+  host     : 'us-cdbr-iron-east-04.cleardb.net',
+  user     : 'b6299f7324174a',
+  password : 'ed9a70f3',
+  database: 'heroku_ec1433dce5eb1f7'
 });
 
 app.set('port', 3000);
