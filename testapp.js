@@ -57,5 +57,6 @@ app.get('/positions', function(req,res){
 // 	});
 // }
 
-app.listen(app.get('port'));
-console.log('Express server listening on port ' + app.get('port'));
+var	serverPort = process.env.PORT || 5000
+app.listen(serverPort)
+console.log('Express server listening on port ' + serverPort);
