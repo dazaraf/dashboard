@@ -1,6 +1,6 @@
 var portfoliodata;
 
-angular.module('app',[])
+var app = angular.module('app',[]);
 
 // -----
 // Service
@@ -15,19 +15,7 @@ angular.module('app',[])
 // Controllers
 // ------
 
-.controller('PnLController',function($scope,$rootScope,$http,$interval){
-	//format money
-	Number.prototype.formatMoney = function(c, d, t){
-	var n = this, 
-    c = isNaN(c = Math.abs(c)) ? 2 : c, 
-    d = d == undefined ? "." : d, 
-    t = t == undefined ? "," : t, 
-    s = n < 0 ? "-" : "", 
-    i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
-    j = (j = i.length) > 3 ? j % 3 : 0;
-   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
- 	};
-
+app.controller('PnLController',function($scope,$rootScope,$http,$interval){
 	//load portfolio names into an array
 	$scope.portfolioNames = [];
 	$http.get('/api').then(function(response){
@@ -46,6 +34,7 @@ angular.module('app',[])
 			$scope.portfolioNames = nameArray;
 			
 		})
+
 
 	//create an array of selected portfolionames.
 	$scope.selection = [];
@@ -90,6 +79,13 @@ angular.module('app',[])
 			// console.log($scope.updated);
 			// console.log(updatedLen);
 			//initialize all the new variables
+			$rootScope.updatedPnL = 0
+			$rootScope.updatedIncomingpnl = 0;
+			$rootScope.updatedTradingpnl = 0;
+			$rootScope.updatedGrossexp = 0;
+			$rootScope.updatedLongpos = 0;
+			$rootScope.updatedShortpos = 0;
+			$rootScope.updatedBeta = 0;
 			var updatedIncomingpnl = 0;
 			var updatedTradingpnl = 0;
 			var updatedGrossexp = 0;
@@ -100,31 +96,25 @@ angular.module('app',[])
 			for(j=0; j<updatedLen; j++){
 
 				updatedIncomingpnl += $scope.updated[j].incomingpnl;
-				updatedIncomingpnl = parseFloat(updatedIncomingpnl).toFixed(2);
-				$rootScope.updatedIncomingpnl = updatedIncomingpnl.formatMoney(2);
-				console($rootScope.updatedIncomingpnl);
-
+				$rootScope.updatedIncomingpnl = updatedIncomingpnl.toFixed(2);
+				$rootScope.updatedIncomingpnl = $rootScope.updatedIncomingpnl.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+				
 				updatedTradingpnl += $scope.updated[j].tradingpnl;
-				$rootScope.updatedTradingpnl = updatedTradingpnl;
-				$rootScope.updatedTradingpnl = parseFloat($rootScope.updatedTradingpnl).toFixed(2);
-				$rootScope.updatedTradingpnl = $rootScope.updatedTradingpnl.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
-
+				$rootScope.updatedTradingpnl = updatedTradingpnl.toFixed(2);
+				$rootScope.updatedTradingpnl = $rootScope.updatedTradingpnl.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+				
 				updatedGrossexp += $scope.updated[j].grossexp;
 				$rootScope.updatedGrossexp = updatedGrossexp;
-				$rootScope.updatedGrossexp = parseFloat($rootScope.updatedGrossexp).toFixed(2);
-				$rootScope.updatedTradingpnl = $rootScope.updatedTradingpnl.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+				$rootScope.updatedGrossexp = $rootScope.updatedGrossexp.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
 				updatedLongpos += $scope.updated[j].longpos;
 				$rootScope.updatedLongpos = updatedLongpos;
-				$rootScope.updatedLongpos = parseFloat($rootScope.updatedLongpos).toFixed(2);
-				$rootScope.updatedLongpos = $rootScope.updatedLongpos.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+				$rootScope.updatedLongpos = $rootScope.updatedLongpos.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
 				updatedShortpos += $scope.updated[j].shortpos;
 				$rootScope.updatedShortpos = updatedShortpos;
-				$rootScope.updatedShortpos = parseFloat($rootScope.updatedShortpos).toFixed(2);
-				$rootScope.updatedShortpos = $rootScope.updatedShortpos.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
-
-				
+				$rootScope.updatedShortpos = $rootScope.updatedShortpos.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			
 			}
 
 
@@ -136,26 +126,66 @@ angular.module('app',[])
 				var weightedBeta = $scope.updated[k].ptfbeta * weight;
 				// console.log('betaWeight for ' + $scope.updated[k].user + ' is ' + weight);
 
-				console.log('Current Beta is ' + updatedBeta + ': Adding weightedBeta for ' + $scope.updated[k].user + ' which is ' + weightedBeta)
+				// console.log('Current Beta is ' + updatedBeta + ': Adding weightedBeta for ' + $scope.updated[k].user + ' which is ' + weightedBeta)
 				updatedBeta += weightedBeta;
 				$rootScope.updatedBeta = updatedBeta;
 				$rootScope.updatedBeta = parseFloat($rootScope.updatedBeta).toFixed(2); 
 
 			}
-			var updatedPnl = updatedTradingpnl + updatedIncomingpnl;
-			$rootScope.updatedPnl = updatedPnl;
-			$rootScope.updatedPnl = parseFloat($rootScope.updatedPnl).toFixed(2); 
+			updatedPnl = updatedTradingpnl + updatedIncomingpnl;
+			updatedPnl = updatedPnl.toFixed(2);
+			$rootScope.updatedPnl = updatedPnl.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			
+			},function(err){throw err});
+		},500);
+
+
+		$interval(function(){
+
+			$http.get('/sectorsApi').then(function(response){
+				sectorsData = response.data;
+				$scope.sectors = sectorsData;
+
+				$scope.sectorsUpdated = [];
+				var len = $scope.sectors.length;
+				for(i=0; i<len; i++){
+
+					if (_.contains($scope.selection,$scope.sectors[i].user)) {
+						$scope.sectorsUpdated.push($scope.sectors[i]);
+					}
+				}
+
+				// console.log('sectorsUpdated');
+				// console.log($scope.sectorsUpdated);
+
+				valueArray = new Array(12).fill(0);
+				var updatedSectorsLength = $scope.sectorsUpdated.length;
+				var chartData = []
+				var obj = $scope.sectors[0];
+
+				for(i = 0; i<updatedSectorsLength; i++){
+
+					var currentObj = $scope.sectorsUpdated[i];
+					// console.log('CurrentObj is now ' + currentObj[Object.keys(currentObj)[0]])
+					for(j = 0; j<valueArray.length; j++){
+						valueArray[j] += currentObj[Object.keys(currentObj)[j+1]];
+						// console.log('The ' + j + 'th entry in valueArray is ' + valueArray[j]);
+					}
+				}
+				for(k = 0; k<valueArray.length; k++){
+					
+					entry = {"sector": Object.keys(obj)[k+1], "exposure": valueArray[k]};
+					chartData.push(entry);
+				}
+				// console.log(chartData);
+
+				$scope.chartData = chartData;
 
 			},function(err){throw err});
-		},5000);
 
+		},500);
 
-})
-
-.controller('sectorsController', function($scope,$rootScope,$http,$interval){
-	
-})
-
+});
 
 
 

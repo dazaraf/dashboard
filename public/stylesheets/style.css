@@ -3,6 +3,94 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
+#topDiv {
+    display: flex;
+}
+
+#pnlDiv{
+    margin: 10px 120px;
+}
+
+#pnlTable {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 18px;
+    height: 500px;
+    width: 480px;
+    text-align: left;
+    background: rgb(21, 139, 242);
+    background: rgba(21, 139, 242,0.2);
+    float: left;
+/*    border: 2px dotted grey;*/
+}
+
+
+#portfolioOptions{
+    overflow: hidden;
+    background: rgb(21, 139, 242);
+    background: rgba(21, 139, 242,0.2);
+}
+
+#formCheckbox{
+    display: inline-block;
+}
+
+#formLabels{
+    display: inline-block;
+    vertical-align: top;
+    color: black;
+}
+
+.Checkboxes{
+
+
+}
+
+.Labels{
+    margin-bottom: 19.5px;
+}
+
+.Labels:hover{
+    background-color: rgb(2, 97, 252);
+    color: rgb(244, 246, 249);
+}
+
+#pnlTable tr:hover{
+   background-color: rgb(157, 21, 242);
+   opacity: 0.7;
+}
+
+.scrollable{
+    overflow: scroll;
+    height: 400px;
+    width: 700px;
+}
+
+.subTable td{
+    width: 400px;
+    text-align: center;
+}
+
+.innertd{
+    border-left: 1px black dashed;
+/*    border-right: 1px black dashed;*/
+}
+
+.scrollable tr:hover{
+   background-color: rgb(157, 21, 242);
+   opacity: 0.7;
+}
+
+#chart{
+    float: right;
+    height: 500px;
+    margin: 77px 120px;
+    width: 480px;
+}
+
+.negative{
+    fill: darkred;
+}
+
+.positive{
+    fill: lightsteelblue;
 }

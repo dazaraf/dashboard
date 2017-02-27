@@ -7,24 +7,143 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/core.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/d3/4.5.0/d3.js"></script>
   </head>
-  <body ng-app = 'app' ng-controller = 'PnLController'>
-  	
-        <div class="row">
-          <div class="col-md-6">
-            <h4>Portfolios</h4>
-            <div class="form-group" id = 'checkboxForm'>
-              <label ng-repeat="name in portfolioNames" value="{{name}}" >
-                <input type="checkbox" value="{{name}}" ng-checked="selection.indexOf(name) > -1" ng-click="toggleSelection(name)" class="checkbox-inline" > {{name}}
-                </input>
-                <br></br>
-            </div>
-            <p>{{updatedIncomingpnl}}</p>
-          </div>
+  <body ng-app = "app" >
+  	<h1> Mayan Capital Portfolio Snapshot</h1>
+  	<div id = 'topDiv' ng-controller = 'PnLController'> 
+
+		<div id = "pnlDiv">
+		<h2> All figures in USD</h2>
+		<table id = 'pnlTable'>
+		    <tr>
+		        <td>PnL</td>
+		        <td>{{updatedPnl}}</td>
+		    </tr>
+		    <tr>
+		        <td>Incoming PnL</td>
+		        <td>{{updatedIncomingpnl}}</td>
+		    </tr>
+		    <tr>
+		        <td>Trading PnL</td>
+		        <td>{{updatedTradingpnl}}</td>
+		    </tr>
+
+		    <tr>
+		        <td>&nbsp;</td>
+		        <td>&nbsp;</td>
+		    </tr>
+		    <tr>
+		        <td>Net Dollars Exposure</td>
+		        <td>{{updatedGrossexp}}</td>
+		    </tr>
+		    <tr>
+		        <td>Long Dollars Exposure</td>
+		        <td>{{updatedLongpos}}</td>
+		    </tr>
+		    <tr>
+		        <td>Short Dollars Exposure</td>
+		        <td>{{updatedShortpos}}</td>
+		    </tr>
+		    <tr>
+		        <td>&nbsp;</td>
+		        <td>&nbsp;</td>
+		    </tr>
+		    <tr>
+		        <td>Beta</td>
+		        <td>{{updatedBeta}}</td>
+		    </tr>
+		      <tr>
+		        <td>1% Var</td>
+		        <td>{{pnldataModelUpdated.onedayonepctvar}}</td>
+		    </tr>
+		</table>
+		</div>
+
+
+		<div id = 'portfolioOptions'>
+	        <h4>Portfolios</h4>
+	        <div id="formCheckbox" >
+	          <label ng-repeat="name in portfolioNames" value="{{name}}" >
+	            <input type="checkbox" value="{{name}}" ng-checked="selection.indexOf(name) > -1" ng-click="toggleSelection(name)" class="Checkboxes" >
+	            </input>
+	            <br></br>
+	        </div>
+
+	        <div id = "formLabels" ng-controller = 'tradesController'>
+		      	<div ng-repeat = "name in portfolioNames" class="Labels">
+		      		<a id = "{{name}}" onclick="display(this)">{{name}}</a>
+		      	</div>
+		      	<br></br>
+	    	</div>
+	        <script>
+	            var f = 'pd';
+	            function display(me){
+	                f = me.checked ? null : me.id;
+	            }
+
+	        </script>
+      	</div>
 	    
-	<p>Outside div {{updatedIncomingpnl}}</p>
-  	<!--Angular script-->
-  	<script src="../static/javascripts/frontend.js"></script>
+	  
+
+	    <div id = "chart" class = "span5"> 
+			<bar data = 'chartData'></bar>
+		</div>
+	</div>
+
+    <div id ="tradestable" ng-controller ="tradesController">
+	    <h3>Portfolios Trades</h3>
+	    <table class="table" >
+	        <thead>
+	            <tr>
+	              <th>Trade ID</th>
+	              <th>Portfolio</th>
+	              <th>Ticker</th>
+	              <th>Open Price</th>
+	              <th>Quantity</th>
+	            </tr>
+	        </thead>
+
+
+	        <tbody>
+	            <tr>
+	                <td colspan="100">
+	            <div class ="scrollable">
+	                <table class = "subTable">
+	                    <tr ng-repeat="user in data">
+	                    <td>
+	                    {{user.id}}
+	                    </td>
+	                    <td class="innertd">
+	                    {{user.user}}
+	                    </td>
+	                    <td class="innertd">
+	                    {{user.Ticker}}
+	                    </td>
+	                    <td class="innertd">
+	                    {{user.OpenPrice}}    
+	                    </td>
+	                    <td class="innertd">
+	                     {{user.Quantity}}
+	                    </td>
+	                    </tr>
+	                </table>
+	            </div>
+	                </td>
+	            </tr>
+	       </tbody>            
+	    </table>
+    </div>
+
+ 
+
+
+        
+  	<!--Controllers script-->
+  	<script src="../static/javascripts/controllers.js"></script>
+  	<script type="text/javascript" src = "../static/javascripts/tradesControl.js"></script>
+  	<!-- Directives script -->
+  	<script type="text/javascript" src = "../static/javascripts/sectorsChart.js"></script>
   </body>
 </html>

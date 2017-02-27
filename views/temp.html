@@ -1,0 +1,84 @@
+<div class="container-fluid">
+  <div ng-controller = "PnLController">
+<!--End-Chart-box--> 
+    <div class="row-fluid">
+    	<div class = "span5" id = "pnlTable">
+    		<h2> Mayan Capital Portfolio Snapshot</h2>
+
+			<div id = "pnlDiv">
+			<h4> All figures in USD</h4>
+			<table id = 'pnlTable'>
+			    <tr>
+			        <td>PnL</td>
+			        <td>{{updatedPnl}}</td>
+			    </tr>
+			    <tr>
+			        <td>Incoming PnL</td>
+			        <td>{{updatedIncomingpnl}}</td>
+			    </tr>
+			    <tr>
+			        <td>Trading PnL</td>
+			        <td>{{updatedTradingpnl}}</td>
+			    </tr>
+
+			    <tr>
+			        <td>&nbsp;</td>
+			        <td>&nbsp;</td>
+			    </tr>
+			    <tr>
+			        <td>Net Dollars Exposure</td>
+			        <td>{{updatedGrossexp}}</td>
+			    </tr>
+			    <tr>
+			        <td>Long Dollars Exposure</td>
+			        <td>{{updatedLongpos}}</td>
+			    </tr>
+			    <tr>
+			        <td>Short Dollars Exposure</td>
+			        <td>{{updatedShortpos}}</td>
+			    </tr>
+			    <tr>
+			        <td>&nbsp;</td>
+			        <td>&nbsp;</td>
+			    </tr>
+			    <tr>
+			        <td>Beta</td>
+			        <td>{{updatedBeta}}</td>
+			    </tr>
+			      <tr>
+			        <td>1% Var</td>
+			        <td>{{pnldataModelUpdated.onedayonepctvar}}</td>
+			    </tr>
+			</table>
+			</div>
+		</div>
+
+		<div class = "span2">
+			<div id = 'portfolioOptions'>
+	        <h4>Portfolios</h4>
+	        <div id="formCheckbox" >
+	          <label ng-repeat="name in portfolioNames" value="{{name}}" >
+	            <input type="checkbox" value="{{name}}" ng-checked="selection.indexOf(name) > -1" ng-click="toggleSelection(name)" class="Checkboxes" >
+	            </input>
+	            <br></br>
+	        </div>
+	        </div>
+	        <div id = "formLabels" ng-controller = 'tradesController'>
+		      	<div ng-repeat = "name in portfolioNames" class="Labels">
+		      		<a id = "{{name}}" onclick="display(this)">{{name}}</a>
+		      	</div>
+		      	<br></br>
+	    	</div>
+	        <script>
+	            var f = 'pd';
+	            function display(me){
+	                f = me.checked ? null : me.id;
+	            }
+
+	        </script>
+      	</div>
+		</div>
+    </div>
+
+  </div>
+</div>
